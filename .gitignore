@@ -127,3 +127,4 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+workshop01/requirements.txt
