@@ -4,6 +4,8 @@
 #ARG INSTANCE_HASH_ARG=123
 FROM python:3.8-slim
 
+LABEL org.opencontainers.image.source=https://github.com/qdchong11/myrepo
+
 ENV PORT=3000
 ENV INSTANCE_NAME=test
 ENV INSTANCE_HASH=123
