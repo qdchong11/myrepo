@@ -1,0 +1,63 @@
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: bgg-backend-secret
+type: Opaque
+data:
+  BGG_DB_PASSWORD: Y2hhbmdlaXQ=
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bgg-backend-deploy
+  labels: 
+    name: bgg-backend-deploy
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      name: bgg-backend-po
+  template:
+    metadata:
+      name: bgg-backend-po
+      labels:
+        name: bgg-backend-po
+      
+    spec:
+      containers:
+      - name: bgg-backend-container
+        image: stackupiss/bgg-backend:v1
+        ports:
+        - name: bgg-port
+          containerPort: 3000
+        env:
+          - name: BGG_DB_USER
+            value: root
+          - name: BGG_DB_HOST
+            value: bggns-db-svc
+        envFrom:
+        - secretRef:
+            name: bgg-backend-secret
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 3000
+            scheme: HTTP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bgg-backend-svc
+  labels:
+    name: bgg-backend-svc
+spec:
+  type: LoadBalancer
+  selector:
+    name: bgg-backend-po
+  ports:
+  - port: 80
+    targetPort: bgg-port
+
+
+

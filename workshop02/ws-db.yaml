@@ -1,0 +1,43 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+    name: bggns
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bggns-db-svc
+  labels:
+    name: bggns-db-svc
+spec:
+  type: ClusterIP
+  selector:
+    name: bggns-db-po
+  ports:
+  - port: 3306
+    targetPort: db-port
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bggns-db-deploy
+  labels:
+    name: bggns-db-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: bggns-db-po
+  template:
+    metadata:
+      labels:
+        name: bggns-db-po
+    spec:
+      containers:
+      - name: bggns-db-container
+        image: stackupiss/bgg-database:v1
+        ports:
+        - name: db-port
+          containerPort: 3306
