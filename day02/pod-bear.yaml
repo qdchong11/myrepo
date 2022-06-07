@@ -1,0 +1,39 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: myconfigmap
+  labels:
+    app: myapplication
+data:
+  INSTANCE_NAME: dov-bear-instance-name
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mysecret
+  labels:
+    name: dov-secret
+type: Opaque
+data:
+  INSTANCE_NAME: aGVsbG9vbw==
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: dov-bear
+  labels:
+    name: dov-bear
+    dept: eng
+spec:
+  containers:
+    - image:  chukmunnlee/dov-bear:v2
+      imagePullPolicy: IfNotPresent
+      name:  dov-bear-container
+      ports:
+      - containerPort: 3000
+      envFrom:
+      - secretRef:
+          name: mysecret
