@@ -1,0 +1,29 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pvc
+spec:
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: do-block-storage
+  accessModes:
+    - ReadWriteOnce
+  
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: wordpress-pvc
+spec:
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: do-block-storage
+  accessModes:
+      - ReadWriteOnce
+
+
+  
